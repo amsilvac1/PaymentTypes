@@ -50,6 +50,22 @@ public class FactureDetail {
         this.unitPrice = unitPrice;
     }
 
+    public FactureClient getFactureClient() {
+        return FactureClient;
+    }
+
+    public void setFactureClient(FactureClient FactureClient) {
+        this.FactureClient = FactureClient;
+    }
+
+    public Product getProduct() {
+        return product;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
+    }
+
 
 }
 
