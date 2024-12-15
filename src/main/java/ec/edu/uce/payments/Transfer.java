@@ -3,10 +3,10 @@ package ec.edu.uce.payments;
 import jakarta.enterprise.context.ApplicationScoped;
 
 @ApplicationScoped
-@QualifierPayment("transfer")
+@QualifierPayment(PaymentType.TRANSFER)
 public class Transfer implements Payment {
     @Override
-    public String payProcess(double amount) {
-        return "Pago realizado por transferencia de: " + amount;
+    public String payProcess() {
+        return "Pago realizado por transferencia bancaria";
     }
 }

@@ -5,6 +5,7 @@ import ec.edu.uce.jpa.FactureClient;
 import ec.edu.uce.jpa.FactureDetail;
 import ec.edu.uce.jpa.Product;
 import ec.edu.uce.payments.Payment;
+import ec.edu.uce.payments.PaymentType;
 import ec.edu.uce.payments.QualifierPayment;
 import ec.edu.uce.services.ClientService;
 import ec.edu.uce.services.FactureClientService;
@@ -12,6 +13,7 @@ import ec.edu.uce.services.FactureDetailService;
 import ec.edu.uce.services.ProductService;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.Response;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,15 +36,15 @@ public class HelloResource {
     private ProductService productService;
 
     @Inject
-    @QualifierPayment("creditCard")
+    @QualifierPayment(PaymentType.CREDITCARD)
     private Payment paymentCreditCard;
 
     @Inject
-    @QualifierPayment("paypal")
+    @QualifierPayment(PaymentType.PAYPAL)
     private Payment paymentPaypal;
 
     @Inject
-    @QualifierPayment("transfer")
+    @QualifierPayment(PaymentType.TRANSFER)
     private Payment paymentTransfer;
 
     //CREAR UN CLIENTE DIRECTAMENTE DESDE EL METODO
@@ -259,7 +261,30 @@ public class HelloResource {
         sb.append("TOTAL A PAGAR: $").append(String.format("%.2f", total)).append("\n");
         sb.append("===============================================\n");
 
-        return sb.toString();
+        PaymentType paymentType;
+
+        try {
+            paymentType = PaymentType.valueOf(factureClient.getPaymentType().toUpperCase());
+        } catch (IllegalArgumentException e) {
+            return "Error: Tipo de pago no soportado. Los tipos válidos son: CREDIT_CARD, TRANSFER, PAYPAL.";
+        }
+
+        Payment paymentProcessor;
+
+        switch (paymentType) {
+            case CREDITCARD:
+                paymentProcessor = paymentCreditCard;
+                break;
+            case TRANSFER:
+                paymentProcessor = paymentTransfer;
+                break;
+            case PAYPAL:
+                paymentProcessor = paymentPaypal;
+                break;
+            default:
+                return "Error: Tipo de pago no soportado.";
+        }
+        return sb.toString() + paymentProcessor.payProcess();
     }
 }
 

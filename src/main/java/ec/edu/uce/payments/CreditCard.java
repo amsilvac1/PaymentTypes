@@ -3,10 +3,10 @@ package ec.edu.uce.payments;
 import jakarta.enterprise.context.ApplicationScoped;
 
 @ApplicationScoped
-@QualifierPayment("creditcard")
+@QualifierPayment(PaymentType.CREDITCARD)
 public class CreditCard implements Payment {
     @Override
-    public String payProcess(double amount) {
-        return "Pago realizado por tarjeta de crédito de: " + amount;
+    public String payProcess() {
+        return "Pago realizado por tarjeta de crédito";
     }
 }

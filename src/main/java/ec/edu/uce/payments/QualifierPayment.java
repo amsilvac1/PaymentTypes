@@ -12,7 +12,7 @@ import java.lang.annotation.Target;
 @Target({ElementType.FIELD, ElementType.TYPE, ElementType.METHOD, ElementType.PARAMETER})
 
 public @interface QualifierPayment {
-    String value() default "";
+    PaymentType value();
 
 
 }
